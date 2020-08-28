@@ -1,0 +1,9 @@
+mongo:
+  enabled: true
+  user: root
+  host: "localhost"
+  port: 27017
+  database: "crates"
+  authentication: true
+    auth: "admin"
+    password: ""
