@@ -47,7 +47,7 @@ public class KillCrate extends Keys {
         lore.add("&7&m-------------------------------");
         lore.add("&7You can get keys by killing players.");
         lore.add("");
-        lore.add("&7You have &b" + profile.getKillKeys().size() + " &7keys.");
+        lore.add("&7You have &b" + profile.getKillKeys() + " &7keys.");
         lore.add("");
         lore.add("&7&oClick to open");
         lore.add("&7&m-------------------------------");

@@ -18,7 +18,6 @@ public class ProfileListener implements Listener {
         Player player = event.getPlayer();
         Profile profile = new Profile(player.getUniqueId());
         plugin.getProfileManager().getProfiles().put(player.getUniqueId(), profile);
-
         if (plugin.getMongoManager().getUUID(player.getUniqueId()) == null) {
             plugin.getMongoManager().insertPlayer(player.getUniqueId());
         } else {

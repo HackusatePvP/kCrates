@@ -5,7 +5,9 @@ import cc.fatenetwork.kcrates.crates.Keys;
 import cc.fatenetwork.kcrates.profile.Profile;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -57,5 +59,10 @@ public class CrateGui implements Listener {
         itemMeta.setDisplayName("");
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    @EventHandler
+    public void onClick(InventoryClickEvent event) {
+
     }
 }
