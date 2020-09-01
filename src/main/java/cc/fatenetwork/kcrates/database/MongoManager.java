@@ -56,9 +56,17 @@ public class MongoManager {
 
         BasicDBObject doc = new BasicDBObject("uuid", uuid)
                 .append("name", player.getName())
-                .append("killKeys", String.valueOf(0));
+                .append("killKeys", String.valueOf(0))
+                .append("voteKeys", String.valueOf(0))
+                .append("commonKeys", String.valueOf(0))
+                .append("rareKeys", String.valueOf(0))
+                .append("epicKeys", String.valueOf(0));
         coll.insert(doc);
         profile.setKillKeys(0);
+        profile.setVoteKeys(0);
+        profile.setCommonKeys(0);
+        profile.setRareKeys(0);
+        profile.setEpicKeys(0);
     }
 
     public BasicDBObject getUUID(UUID uuid) {
@@ -83,6 +91,18 @@ public class MongoManager {
 
         edit.remove("killKeys");
         edit.put("killKeys", String.valueOf(profile.getKillKeys()));
+
+        edit.remove("voteKeys");
+        edit.put("voteKeys", String.valueOf(profile.getVoteKeys()));
+
+        edit.remove("commonKeys");
+        edit.put("commonKeys", String.valueOf(profile.getCommonKeys()));
+
+        edit.remove("rareKeys");
+        edit.put("rareKeys", String.valueOf(profile.getRareKeys()));
+
+        edit.remove("epicKeys");
+        edit.put("epicKeys", String.valueOf(profile.getEpicKeys()));
 
         coll.update(object, edit);
     }
@@ -119,7 +139,15 @@ public class MongoManager {
         JSONParser parser = new JSONParser();
         JSONObject object = (JSONObject) parser.parse(js);
         String killKeys = (String) object.get("killKeys");
+        String voteKeys = (String) object.get("voteKeys");
+        String commonKeys = (String) object.get("commonKeys");
+        String rareKeys = (String) object.get("rareKeys");
+        String epicKeys = (String) object.get("epicKeys");
 
         profile.setKillKeys(Integer.parseInt(killKeys));
+        profile.setVoteKeys(Integer.parseInt(voteKeys));
+        profile.setCommonKeys(Integer.parseInt(commonKeys));
+        profile.setRareKeys(Integer.parseInt(rareKeys));
+        profile.setEpicKeys(Integer.parseInt(epicKeys));
     }
 }

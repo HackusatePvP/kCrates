@@ -4,14 +4,12 @@ import lombok.Data;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
 import java.util.UUID;
 
 @Data
 public class Profile {
     private UUID uuid;
-    private int killKeys;
-    private int voteKeys;
+    private int killKeys, voteKeys, commonKeys, rareKeys, epicKeys;
 
     /**
      * This will create a profile in which we can store keys across the network

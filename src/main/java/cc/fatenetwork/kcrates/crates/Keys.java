@@ -1,5 +1,6 @@
 package cc.fatenetwork.kcrates.crates;
 
+import cc.fatenetwork.kcrates.crates.impl.EpicCrate;
 import cc.fatenetwork.kcrates.crates.impl.KillCrate;
 import cc.fatenetwork.kcrates.crates.impl.VoteCrate;
 import cc.fatenetwork.kcrates.profile.Profile;
@@ -14,6 +15,7 @@ public abstract class Keys {
 
     public static Keys KILL_CRATE = new KillCrate("Kill");
     public static Keys VOTE_CRATE = new VoteCrate("Vote");
+    public static Keys EPIC_CRATE = new EpicCrate("Epic");
 
     private String name;
 
@@ -52,6 +54,8 @@ public abstract class Keys {
     public abstract void giveKeys(Profile profile, int amount);
 
     public abstract void setKeys(Profile profile, int amount);
+
+    public abstract int getKeys(Profile profile);
 
 
 }

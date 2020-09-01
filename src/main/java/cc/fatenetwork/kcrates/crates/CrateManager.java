@@ -19,6 +19,9 @@ public class CrateManager implements CrateInterface {
         if (key.equalsIgnoreCase("vote")) {
             return profile.getVoteKeys();
         }
+        if (key.equalsIgnoreCase("epic")) {
+            return profile.getEpicKeys();
+        }
         return 0;
     }
 

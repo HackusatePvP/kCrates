@@ -157,4 +157,9 @@ public class KillCrate extends Keys {
     public void setKeys(Profile profile, int amount) {
         profile.setKillKeys(amount);
     }
+
+    @Override
+    public int getKeys(Profile profile) {
+        return profile.getVoteKeys();
+    }
 }

@@ -65,6 +65,8 @@ public final class Crate extends JavaPlugin {
         ));
     }
 
+
+
     void registerManagers() {
         mongoManager = new MongoManager(this);
         profileManager = new ProfileManager();

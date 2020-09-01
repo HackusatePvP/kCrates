@@ -78,6 +78,13 @@
             <systemPath>${project.basedir}/lib/kBase-1.0-SNAPSHOT.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>cc.fatenetwork.kVoucher</groupId>
+            <artifactId>kVoucher</artifactId>
+            <version>kVoucher-API</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/kVoucher-1.0-SNAPSHOT.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>

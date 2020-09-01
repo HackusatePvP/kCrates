@@ -69,6 +69,10 @@ public class KeyCommand implements CommandExecutor {
                         player.sendMessage(StringUtil.format("&cKey not found."));
                         return true;
                     }
+                    if (Keys.getByName(key).getKeys(plugin.getProfileManager().getProfile(player.getUniqueId())) == 0) {
+                        player.sendMessage(StringUtil.format("&cYou do not have any keys to giveaway."));
+                        return true;
+                    }
                     Player target = Bukkit.getPlayerExact(args[2]);
                     if (target == null) {
                         player.sendMessage(StringUtil.format("&cTarget not found."));
@@ -113,6 +117,10 @@ public class KeyCommand implements CommandExecutor {
                         return true;
                     }
                     int amount = Integer.parseInt(args[3]);
+                    if (Keys.getByName(key).getKeys(plugin.getProfileManager().getProfile(player.getUniqueId())) < amount) {
+                        player.sendMessage(StringUtil.format("&cYou do not have enough keys to giveaway."));
+                        return true;
+                    }
                     Player target = Bukkit.getPlayerExact(args[2]);
                     if (target == null) {
                         player.sendMessage(StringUtil.format("&cTarget not found."));
