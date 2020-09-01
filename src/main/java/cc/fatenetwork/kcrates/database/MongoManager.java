@@ -1,6 +1,7 @@
 package cc.fatenetwork.kcrates.database;
 
 import cc.fatenetwork.kcrates.Crate;
+import cc.fatenetwork.kcrates.configurations.ConfigFile;
 import cc.fatenetwork.kcrates.profile.Profile;
 import com.mongodb.*;
 import com.mongodb.util.JSON;
@@ -23,13 +24,13 @@ public class MongoManager {
     public MongoManager(Crate plugin) {
         this.plugin = plugin;
         log.info("[kCrate] starting database...");
-        FileConfiguration config = plugin.getConfig();
+        ConfigFile config = plugin.getConfiguration("config");
         try {
             String host = config.getString("mongo.host");
-            String auth = config.getString("mongo.auth");
+            String auth = config.getString("mongo.authentication.auth");
             String user = config.getString("mongo.user");
             int port = config.getInt("mongo.port");
-            String password = config.getString("mongo.password");
+            String password = config.getString("mongo.authentication.password");
             MongoClientURI uri;
             uri = new MongoClientURI("mongodb://" + user + ":" + password + "@" + host + ":" + port + "/?authSource=" + auth);
             mongoClient = new MongoClient(uri);
@@ -81,7 +82,7 @@ public class MongoManager {
         BasicDBObject edit = getUUID(uuid);
 
         edit.remove("killKeys");
-        edit.put("killKeys", profile.getKillKeys());
+        edit.put("killKeys", String.valueOf(profile.getKillKeys()));
 
         coll.update(object, edit);
     }

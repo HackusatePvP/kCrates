@@ -11,7 +11,7 @@ import java.util.Map;
 public abstract class Keys {
     @Getter private static Map<String, Keys> byName = new HashMap<>();
 
-    public static Keys KILL_CRATE = new KillCrate("Kill Crate");
+    public static Keys KILL_CRATE = new KillCrate("Kill");
 
     private String name;
 
@@ -26,12 +26,16 @@ public abstract class Keys {
 
     public abstract String getName();
 
+    public abstract String getKeyName();
+
     /**
      *
      * @param profile We need this for the lore so we can show them how many total keys they have of that crate
      * @return ItemStack
      */
     public abstract ItemStack getCrateItem(Profile profile);
+
+    public abstract int getRewardCount();
 
     public abstract ItemStack[] getRewards();
 

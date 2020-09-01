@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 public class ProfileListener implements Listener {
     private final Crate plugin;
@@ -23,5 +24,11 @@ public class ProfileListener implements Listener {
         } else {
             plugin.getMongoManager().getPlayer(player.getUniqueId());
         }
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        plugin.getMongoManager().update(player.getUniqueId());
     }
 }

@@ -4,6 +4,11 @@ import cc.fatenetwork.kcrates.profile.Profile;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class CrateManager implements CrateInterface {
 
     @Override
@@ -15,15 +20,38 @@ public class CrateManager implements CrateInterface {
     }
 
     @Override
-    public void useCrate(Profile profile, String crate) {
-        if (crate.equalsIgnoreCase("kill")) {
+    public void useCrate(Profile profile, Keys key) {
+        if (key == Keys.KILL_CRATE) {
             profile.setKillKeys(profile.getKillKeys() - 1);
+            giveRewards(key, profile.getPlayer());
         }
     }
 
     @Override
-    public void giveRewards(ItemStack[] itemStacks, Player player) {
-        //todo give the player there select rewards which are picked by a random and send them a message of what they won
+    public void giveRewards(Keys key, Player player) {
+        Random random = new Random();
+        List<ItemStack> items = new ArrayList<>(Arrays.asList(key.getRewards()));
+        ItemStack randomItem = items.get(random.nextInt(items.size()));
+        player.getInventory().addItem(randomItem);
+    }
 
+    @Override
+    public void addKey(String key, Profile profile) {
+        Keys crate = Keys.getByName(key);
+        if (crate != null) {
+            if (crate == Keys.KILL_CRATE) {
+                profile.setKillKeys(profile.getKillKeys() + 1);
+            }
+        }
+    }
+
+    @Override
+    public void setKeys(String key, Profile profile, int amount) {
+        Keys crate = Keys.getByName(key);
+        if (crate != null) {
+            if (crate == Keys.KILL_CRATE) {
+                profile.setKillKeys(amount);
+            }
+        }
     }
 }

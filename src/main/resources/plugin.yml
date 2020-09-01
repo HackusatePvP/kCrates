@@ -3,3 +3,7 @@ version: ${project.version}
 main: cc.fatenetwork.kcrates.Crate
 api-version: 1.16
 authors: [Hackusate_PvP]
+commands:
+  crate:
+    aliases: [key, keys]
+  key:

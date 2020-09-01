@@ -1,9 +1,10 @@
 mongo:
   enabled: true
-  user: root
+  user: "root"
   host: "localhost"
   port: 27017
   database: "crates"
-  authentication: true
+  authentication:
+    enabled: true
     auth: "admin"
     password: ""

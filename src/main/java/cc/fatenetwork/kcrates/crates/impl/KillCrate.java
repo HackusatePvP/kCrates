@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class KillCrate extends Keys {
@@ -34,6 +35,11 @@ public class KillCrate extends Keys {
         return "Kill Crate";
     }
 
+    @Override
+    public String getKeyName() {
+        return "Kill";
+    }
+
     /**
      *
      * @return The item that will be in the gui
@@ -51,9 +57,18 @@ public class KillCrate extends Keys {
         lore.add("");
         lore.add("&7&oClick to open");
         lore.add("&7&m-------------------------------");
-        itemMeta.setLore(lore);
+        itemMeta.setLore(StringUtil.format(lore));
         itemStack.setItemMeta(itemMeta);
         return itemStack;
+    }
+
+    /**
+     *
+     * @return The amount of rewards they can win from the crate
+     */
+    @Override
+    public int getRewardCount() {
+        return 1;
     }
 
     /**
@@ -62,8 +77,21 @@ public class KillCrate extends Keys {
      */
     @Override
     public ItemStack[] getRewards() {
+        ItemStack money = new ItemStack(Material.PAPER);
+        ItemMeta moneyM = money.getItemMeta();
+        moneyM.setDisplayName(StringUtil.format("&7* &a&n&l2K"));
+        moneyM.setLore(StringUtil.format(Arrays.asList("&7&m-----------------------------", "&7This voucher is worth &a2k", "", "&7&oClick to redeem",
+                "&7&m-----------------------------")));
+        money.setItemMeta(moneyM);
         return new ItemStack[] {
-                new ItemStack(Material.PAPER, 16)
+                money,
+                new ItemStack(Material.DIAMOND_SWORD),
+                new ItemStack(Material.DIAMOND_HELMET),
+                new ItemStack(Material.DIAMOND_CHESTPLATE),
+                new ItemStack(Material.DIAMOND_LEGGINGS),
+                new ItemStack(Material.DIAMOND_BOOTS),
+                new ItemStack(Material.GOLDEN_APPLE),
+                new ItemStack(Material.BOOK, 16)
         };
     }
 
