@@ -14,5 +14,11 @@ public interface CrateInterface {
 
     void addKey(String key, Profile profile);
 
+    void addKey(String key, Profile profile, int amount);
+
     void setKeys(String key, Profile profile, int amount);
+
+    void removeKey(String key, Profile profile);
+
+    void removeKey(String key, Profile profile, int amount);
 }

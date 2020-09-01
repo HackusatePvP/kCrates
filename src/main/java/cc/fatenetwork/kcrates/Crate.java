@@ -9,6 +9,8 @@ import cc.fatenetwork.kcrates.database.MongoManager;
 import cc.fatenetwork.kcrates.gui.GuiHandler;
 import cc.fatenetwork.kcrates.profile.ProfileListener;
 import cc.fatenetwork.kcrates.profile.ProfileManager;
+import cc.fatenetwork.kcrates.server.ServerManager;
+import cc.fatenetwork.kcrates.server.ServerState;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -25,6 +27,7 @@ public final class Crate extends JavaPlugin {
     private GuiHandler guiHandler;
     private CrateInterface crateInterface;
     private List<ConfigFile> files = new ArrayList<>();
+    private ServerManager serverManager;
     private final Logger log = Bukkit.getLogger();
     @Getter private static Crate plugin;
 
@@ -36,6 +39,9 @@ public final class Crate extends JavaPlugin {
         loadConfiguration();
         registerManagers();
         registerEvents();
+        ConfigFile configFile = getConfiguration("config");
+        serverManager.setServerState(ServerState.valueOf(configFile.getString("server").toUpperCase()));
+        log.info("[kCrate] server: " + serverManager.getServerState().toString());
         log.info("[kCrate] loading commands");
         registerCommands();
         log.info("[kCrate] done!");
@@ -64,6 +70,7 @@ public final class Crate extends JavaPlugin {
         profileManager = new ProfileManager();
         guiHandler = new GuiHandler(this);
         crateInterface = new CrateManager();
+        serverManager = new ServerManager();
     }
 
     void registerCommands() {

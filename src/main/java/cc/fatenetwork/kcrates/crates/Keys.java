@@ -1,6 +1,7 @@
 package cc.fatenetwork.kcrates.crates;
 
 import cc.fatenetwork.kcrates.crates.impl.KillCrate;
+import cc.fatenetwork.kcrates.crates.impl.VoteCrate;
 import cc.fatenetwork.kcrates.profile.Profile;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
@@ -12,6 +13,7 @@ public abstract class Keys {
     @Getter private static Map<String, Keys> byName = new HashMap<>();
 
     public static Keys KILL_CRATE = new KillCrate("Kill");
+    public static Keys VOTE_CRATE = new VoteCrate("Vote");
 
     private String name;
 
@@ -40,6 +42,16 @@ public abstract class Keys {
     public abstract ItemStack[] getRewards();
 
     public abstract boolean isEnabled();
+
+    public abstract void removeKey(Profile profile);
+
+    public abstract void removeKeys(Profile profile, int amount);
+
+    public abstract void giveKey(Profile profile);
+
+    public abstract void giveKeys(Profile profile, int amount);
+
+    public abstract void setKeys(Profile profile, int amount);
 
 
 }

@@ -8,3 +8,8 @@ mongo:
     enabled: true
     auth: "admin"
     password: ""
+
+server: "KitPvP"
+
+kill: true
+vote: true

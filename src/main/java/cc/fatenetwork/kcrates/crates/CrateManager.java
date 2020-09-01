@@ -16,15 +16,16 @@ public class CrateManager implements CrateInterface {
         if (key.equalsIgnoreCase("kill")) {
             return profile.getKillKeys();
         }
+        if (key.equalsIgnoreCase("vote")) {
+            return profile.getVoteKeys();
+        }
         return 0;
     }
 
     @Override
     public void useCrate(Profile profile, Keys key) {
-        if (key == Keys.KILL_CRATE) {
-            profile.setKillKeys(profile.getKillKeys() - 1);
-            giveRewards(key, profile.getPlayer());
-        }
+        key.removeKey(profile);
+        giveRewards(key, profile.getPlayer());
     }
 
     @Override
@@ -39,9 +40,15 @@ public class CrateManager implements CrateInterface {
     public void addKey(String key, Profile profile) {
         Keys crate = Keys.getByName(key);
         if (crate != null) {
-            if (crate == Keys.KILL_CRATE) {
-                profile.setKillKeys(profile.getKillKeys() + 1);
-            }
+            crate.giveKey(profile);
+        }
+    }
+
+    @Override
+    public void addKey(String key, Profile profile, int amount) {
+        Keys crate = Keys.getByName(key);
+        if (crate != null) {
+            crate.giveKey(profile);
         }
     }
 
@@ -49,9 +56,23 @@ public class CrateManager implements CrateInterface {
     public void setKeys(String key, Profile profile, int amount) {
         Keys crate = Keys.getByName(key);
         if (crate != null) {
-            if (crate == Keys.KILL_CRATE) {
-                profile.setKillKeys(amount);
-            }
+            crate.setKeys(profile, amount);
+        }
+    }
+
+    @Override
+    public void removeKey(String key, Profile profile) {
+        Keys crate = Keys.getByName(key);
+        if (crate != null) {
+            crate.removeKey(profile);
+        }
+    }
+
+    @Override
+    public void removeKey(String key, Profile profile, int amount) {
+        Keys crate = Keys.getByName(key);
+        if (crate != null) {
+            crate.removeKey(profile);
         }
     }
 }

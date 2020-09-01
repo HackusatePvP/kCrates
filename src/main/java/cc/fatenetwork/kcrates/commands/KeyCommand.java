@@ -26,58 +26,90 @@ public class KeyCommand implements CommandExecutor {
             return true;
         }
         Player player = (Player) sender;
-        if (!player.hasPermission("kcrate.admin")) {
-            player.sendMessage(StringUtil.format("&cYou do not have permissions to execute this command."));
-            return true;
-        }
         if (args.length == 0) {
             List<String> message = new ArrayList<>();
             message.add("&7&m-----------------------------------");
-            message.add("&7* &c/key give <key> <player> [amount]");
-            message.add("&7* &c/key set <key> <player> <amount>");
+            message.add("&7* &c/key send <key> <player> [amount]");
+            if (player.hasPermission("kcrate.admin")) {
+                message.add("&7* &c/key give <key> <player> [amount]");
+                message.add("&7* &c/key set <key> <player> <amount>");
+            }
             message.add("&7&m-----------------------------------");
             message.forEach(msg -> player.sendMessage(StringUtil.format(msg)));
         } else {
             if (args.length == 1) {
-                if (args[0].equalsIgnoreCase("give")) {
-                    player.sendMessage(StringUtil.format("&7* &c/key give <key> <player> [amount]"));
-                } else if (args[0].equalsIgnoreCase("set")) {
-                    player.sendMessage(StringUtil.format("&7* &c/key set <player> <amount>"));
-                } else {
-                    player.sendMessage(StringUtil.format("&cArgument not found."));
+                if (args[0].equalsIgnoreCase("send")) {
+                    player.sendMessage(StringUtil.format("&7* &c/key send <key> <player> [amount]"));
+                } else if (player.hasPermission("kcrate.admin")) {
+                    if (args[0].equalsIgnoreCase("give")) {
+                        player.sendMessage(StringUtil.format("&7* &c/key give <key> <player> [amount]"));
+                    } else if (args[0].equalsIgnoreCase("set")) {
+                        player.sendMessage(StringUtil.format("&7* &c/key set <player> <amount>"));
+                    } else {
+                        player.sendMessage(StringUtil.format("&cArgument not found."));
+                    }
                 }
             } else if (args.length == 2) {
-                if (args[0].equalsIgnoreCase("give")) {
-                    player.sendMessage(StringUtil.format("&7* &c/key give <key> <player> [amount]"));
+                if (args[0].equalsIgnoreCase("send")) {
+                    player.sendMessage(StringUtil.format("&7* &c/key send <key> <player> [amount]"));
+                } else if (player.hasPermission("kcrate.admin")) {
+                    if (args[0].equalsIgnoreCase("give")) {
+                        player.sendMessage(StringUtil.format("&7* &c/key give <key> <player> [amount]"));
 
-                } else if (args[0].equalsIgnoreCase("set")) {
-                    player.sendMessage(StringUtil.format("&7* &c/key set <player> <amount>"));
-                } else {
-                    player.sendMessage(StringUtil.format("&cArgument not found."));
+                    } else if (args[0].equalsIgnoreCase("set")) {
+                        player.sendMessage(StringUtil.format("&7* &c/key set <player> <amount>"));
+                    } else {
+                        player.sendMessage(StringUtil.format("&cArgument not found."));
+                    }
                 }
             } else if (args.length == 3) {
-                if (args[0].equalsIgnoreCase("give")) {
+                if (args[0].equalsIgnoreCase("send")) {
                     String key = args[1];
+                    if (Keys.getByName(key) == null) {
+                        player.sendMessage(StringUtil.format("&cKey not found."));
+                        return true;
+                    }
                     Player target = Bukkit.getPlayerExact(args[2]);
                     if (target == null) {
                         player.sendMessage(StringUtil.format("&cTarget not found."));
                         return true;
                     }
-                    if (Keys.getByName(key) == null) {
-                        player.sendMessage(StringUtil.format("&cKey not found."));
+                    Profile profile = plugin.getProfileManager().getProfile(player.getUniqueId());
+                    Profile tar = plugin.getProfileManager().getProfile(target.getUniqueId());
+                    plugin.getCrateInterface().removeKey(key, profile);
+                    plugin.getCrateInterface().addKey(key, tar);
+                    player.sendMessage(StringUtil.format("&7You have sent &6" + key.toUpperCase() + " &7to &c" + target.getName()));
+                    target.sendMessage(StringUtil.format("&7You have received &6" + key.toUpperCase() + " &7from &c" + player.getName()));
+                } else if (player.hasPermission("kcrate.admin")) {
+
+                    if (args[0].equalsIgnoreCase("give")) {
+                        String key = args[1];
+                        Player target = Bukkit.getPlayerExact(args[2]);
+                        if (target == null) {
+                            player.sendMessage(StringUtil.format("&cTarget not found."));
+                            return true;
+                        }
+                        if (Keys.getByName(key) == null) {
+                            player.sendMessage(StringUtil.format("&cKey not found."));
+                        }
+                        Profile profile = plugin.getProfileManager().getProfile(target.getUniqueId());
+                        plugin.getCrateInterface().addKey(key, profile);
+                        player.sendMessage(StringUtil.format("&7You have given &6" + key.toUpperCase() + " &7to &c" + target.getName()));
+                    } else if (args[0].equalsIgnoreCase("set")) {
+                        player.sendMessage("&7* &c/key set <key> <player> <amount>");
+                    } else {
+                        player.sendMessage(StringUtil.format("&cArgument not found."));
                     }
-                    Profile profile = plugin.getProfileManager().getProfile(target.getUniqueId());
-                    plugin.getCrateInterface().addKey(key, profile);
-                } else if (args[0].equalsIgnoreCase("set")) {
-                    player.sendMessage("&7* &c/key set <player> <amount>");
-                } else {
-                    player.sendMessage(StringUtil.format("&cArgument not found."));
                 }
             } else if (args.length == 4) {
-                if (args[0].equalsIgnoreCase("set")) {
-                    String key = args[2];
+                if (args[0].equalsIgnoreCase("send")) {
+                    String key = args[1];
+                    if (Keys.getByName(key) == null) {
+                        player.sendMessage(StringUtil.format("&cKey not found."));
+                        return true;
+                    }
                     if (!isInt(args[3])) {
-                        player.sendMessage(StringUtil.format("&cNot a valid int type"));
+                        player.sendMessage(StringUtil.format("&cInvalid int type."));
                         return true;
                     }
                     int amount = Integer.parseInt(args[3]);
@@ -86,13 +118,53 @@ public class KeyCommand implements CommandExecutor {
                         player.sendMessage(StringUtil.format("&cTarget not found."));
                         return true;
                     }
-                    if (Keys.getByName(key) == null) {
-                        player.sendMessage(StringUtil.format("&cKey not found."));
+                    Profile profile = plugin.getProfileManager().getProfile(player.getUniqueId());
+                    Profile tar = plugin.getProfileManager().getProfile(target.getUniqueId());
+                    plugin.getCrateInterface().removeKey(key, profile, amount);
+                    plugin.getCrateInterface().addKey(key, tar, amount);
+                    player.sendMessage(StringUtil.format("&7You have sent &a" + amount + "x &6" + key.toUpperCase() + " &7to &c" + target.getName()));
+                    target.sendMessage(StringUtil.format("&7You have received &a" + amount + "x &6" + key.toUpperCase() + " &7from &c" + player.getName()));
+                } else if (player.hasPermission("kcrate.admin")) {
+                    if (args[0].equalsIgnoreCase("give")) {
+                        String key = args[1];
+                        if (!isInt(args[3])) {
+                            player.sendMessage(StringUtil.format("&cInvalid int type."));
+                            return true;
+                        }
+                        int amount = Integer.parseInt(args[3]);
+                        Player target = Bukkit.getPlayerExact(args[2]);
+                        if (target == null) {
+                            player.sendMessage(StringUtil.format("&cTarget not found."));
+                            return true;
+                        }
+                        if (Keys.getByName(key) == null) {
+                            player.sendMessage(StringUtil.format("&cKey not found."));
+                        }
+                        Profile profile = plugin.getProfileManager().getProfile(target.getUniqueId());
+                        plugin.getCrateInterface().setKeys(key, profile, profile.getKillKeys() + amount);
+                        player.sendMessage(StringUtil.format("&7You have given &a" + amount + "x &6" + key.toUpperCase() + " &7to &c" + target.getName()));
+                    } else if (args[0].equalsIgnoreCase("set")) {
+                        String key = args[1];
+                        if (Keys.getByName(key) == null) {
+                            player.sendMessage(StringUtil.format("&cKey not found."));
+                            return true;
+                        }
+                        Player target = Bukkit.getPlayerExact(args[2]);
+                        if (target == null) {
+                            player.sendMessage(StringUtil.format("&cTarget not found."));
+                            return true;
+                        }
+                        if (!isInt(args[3])) {
+                            player.sendMessage(StringUtil.format("&cInvalid int type"));
+                            return true;
+                        }
+                        int amount = Integer.parseInt(args[3]);
+                        Profile profile = plugin.getProfileManager().getProfile(target.getUniqueId());
+                        plugin.getCrateInterface().setKeys(key, profile, amount);
+                        player.sendMessage(StringUtil.format("&7You have set the &6" + key.toUpperCase() + " &7keys of &c" + target.getName() + " &7to &a" + amount));
+                    } else {
+                        player.sendMessage(StringUtil.format("&cArgument not found."));
                     }
-                    Profile profile = plugin.getProfileManager().getProfile(target.getUniqueId());
-                    plugin.getCrateInterface().setKeys(key, profile, amount);
-                } else {
-                    player.sendMessage(StringUtil.format("&cArgument not found."));
                 }
             }
         }

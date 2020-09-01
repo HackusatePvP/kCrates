@@ -25,14 +25,15 @@ public class CrateGui implements Listener {
 
 
     public Inventory getCrateInv(Profile profile) {
-        Inventory i = Bukkit.createInventory(null, 36, StringUtil.format("&7* &e&lCrates"));
+        Inventory i = Bukkit.createInventory(null, 27, StringUtil.format("&7* &e&lCrates"));
         //todo setup all crate shops here
         i.setItem(2, getCrate("Kill", profile));
+        i.setItem(4, getCrate("Vote", profile));
 
         //once we set all the crate items we now need to add the borders. We can use a for statement instead of doing i.setItem() for each one
 
         //make a counter that will stop once we reach the end of the inventory
-        for (int counter = 0; counter <= 35; counter++) {
+        for (int counter = 0; counter <= 26; counter++) {
             //this if statement makes sure the inventory isn't full
             if (i.firstEmpty() != -1) {
                 //checks to see if the current slot has an item, if not it will be identified as air
@@ -88,6 +89,10 @@ public class CrateGui implements Listener {
         ItemStack itemStack = event.getCurrentItem();
         if (itemStack.getItemMeta().getDisplayName().equals(getCrate("Kill", profile).getItemMeta().getDisplayName())) {
             Keys key = Keys.getByName("Kill");
+            if (!key.isEnabled()) {
+                player.sendMessage(StringUtil.format("&cThis crate is not available at this time."));
+                return;
+            }
             /*
             They have just clicked on the kill crate so now if they have a key lets give them their rewards
              */
@@ -97,6 +102,21 @@ public class CrateGui implements Listener {
                 return;
             }
             plugin.getCrateInterface().useCrate(profile, key);
+            player.openInventory(getCrateInv(profile));
+        }
+        if (itemStack.getItemMeta().getDisplayName().equals(getCrate("Vote", profile).getItemMeta().getDisplayName())) {
+            Keys key = Keys.getByName("Vote");
+            if (!key.isEnabled()) {
+                player.sendMessage(StringUtil.format("&cThis crate is not available at this time."));
+                return;
+            }
+            int keys = profile.getVoteKeys();
+            if (keys == 0) {
+                player.sendMessage(StringUtil.format("&cYou do not have any keys to use on this crate."));
+                return;
+            }
+            plugin.getCrateInterface().useCrate(profile, key);
+            player.openInventory(getCrateInv(profile));
         }
     }
 }

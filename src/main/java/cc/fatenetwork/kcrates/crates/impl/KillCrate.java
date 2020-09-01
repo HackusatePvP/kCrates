@@ -1,11 +1,16 @@
 package cc.fatenetwork.kcrates.crates.impl;
 
 import cc.fatenetwork.kbase.utils.StringUtil;
+import cc.fatenetwork.kcrates.Crate;
 import cc.fatenetwork.kcrates.crates.Keys;
 import cc.fatenetwork.kcrates.profile.Profile;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,14 +82,33 @@ public class KillCrate extends Keys {
      */
     @Override
     public ItemStack[] getRewards() {
+        /*
+        Kill-Crate will probably be a kitpvp only crate so for now we can just disable it per-server
+         */
         ItemStack money = new ItemStack(Material.PAPER);
         ItemMeta moneyM = money.getItemMeta();
         moneyM.setDisplayName(StringUtil.format("&7* &a&n&l2K"));
         moneyM.setLore(StringUtil.format(Arrays.asList("&7&m-----------------------------", "&7This voucher is worth &a2k", "", "&7&oClick to redeem",
                 "&7&m-----------------------------")));
         money.setItemMeta(moneyM);
+        ItemStack speed = new ItemStack(Material.POTION);
+        PotionMeta potionMeta = (PotionMeta) speed.getItemMeta();
+        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 1600, 1), true);
+        Potion potion = new Potion(1);
+        potion.apply(speed);
+        speed.setItemMeta(potionMeta);
+
+
+        ItemStack speed2 = new ItemStack(Material.POTION);
+        PotionMeta potionMeta2 = (PotionMeta) speed2.getItemMeta();
+        potionMeta.addCustomEffect(new PotionEffect(PotionEffectType.SPEED, 180, 0), true);
+        Potion potion2 = new Potion(1);
+        potion2.apply(speed2);
+        speed2.setItemMeta(potionMeta2);
         return new ItemStack[] {
                 money,
+                speed,
+                speed2,
                 new ItemStack(Material.DIAMOND_SWORD),
                 new ItemStack(Material.DIAMOND_HELMET),
                 new ItemStack(Material.DIAMOND_CHESTPLATE),
@@ -101,6 +125,36 @@ public class KillCrate extends Keys {
      */
     @Override
     public boolean isEnabled() {
-        return true;
+        return Crate.getPlugin().getConfiguration("config").getBoolean("kill");
+    }
+
+    @Override
+    public void removeKey(Profile profile) {
+        profile.setKillKeys(profile.getKillKeys() - 1);
+    }
+
+    /**
+     *
+     * @param profile Profile object
+     * @param amount amount to remove
+     */
+    @Override
+    public void removeKeys(Profile profile, int amount) {
+        profile.setKillKeys(profile.getKillKeys() - amount);
+    }
+
+    @Override
+    public void giveKey(Profile profile) {
+        profile.setKillKeys(profile.getKillKeys() + 1);
+    }
+
+    @Override
+    public void giveKeys(Profile profile, int amount) {
+        profile.setKillKeys(profile.getKillKeys() + amount);
+    }
+
+    @Override
+    public void setKeys(Profile profile, int amount) {
+        profile.setKillKeys(amount);
     }
 }

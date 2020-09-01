@@ -11,6 +11,7 @@ import java.util.UUID;
 public class Profile {
     private UUID uuid;
     private int killKeys;
+    private int voteKeys;
 
     /**
      * This will create a profile in which we can store keys across the network
